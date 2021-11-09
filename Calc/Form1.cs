@@ -637,9 +637,8 @@ namespace Calc
         {
             if (drag)
             {
-                Point p1 = PointToScreen(e.Location);                               // Get mouse coordinates in relation to the current monitor.
-                Point p2 = new Point(p1.X - startPoint.X, p1.Y - startPoint.Y);     // Position Form correctly under mouse.
-                this.Location = p2;                                                 // Apply coordinates.
+                Point p1 = PointToScreen(e.Location);   // Get mouse coordinates in relation to the current monitor.
+                this.Location = new Point(p1.X - startPoint.X, p1.Y - startPoint.Y);    // Apply coordinates.
             }
         }
 
