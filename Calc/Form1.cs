@@ -63,160 +63,63 @@ namespace Calc
 
         private void CalculateEquation()
         {
-            try
+            for (int k = 0; k < 4; k++)
             {
-                for (int k = 0; k < 4; k++)
+                for (int i = operators.Count - 1; i >= 0; i--)
                 {
-                    for (int i = operators.Count - 1; i >= 0; i--)
+                    if (operators.Count != 0)
                     {
-                        if (operators.Count != 0)
+                        switch (k)
                         {
-                            switch (k)
-                            {
-                                case (int)OPERATORS.MULTIPLY:
-                                    if (operators[i] == "×")
+                            case (int)OPERATORS.MULTIPLY:
+                                if (operators[i] == "×")
+                                {
+                                    numbers[i] = numbers[i] * numbers[i + 1];
+                                    numbers.RemoveAt(i + 1);
+                                    operators.RemoveAt(i);
+                                }
+                                break;
+
+                            case (int)OPERATORS.DIVIDE:
+                                if (operators[i] == "÷")
+                                {
+                                    if (numbers[i + 1] != 0)
                                     {
-                                        numbers[i] = numbers[i] * numbers[i + 1];
+                                        numbers[i] = numbers[i] / numbers[i + 1];
                                         numbers.RemoveAt(i + 1);
                                         operators.RemoveAt(i);
                                     }
-                                    break;
-
-                                case (int)OPERATORS.DIVIDE:
-                                    if (operators[i] == "÷")
+                                    else
                                     {
-                                        if (numbers[i + 1] != 0)
-                                        {
-                                            numbers[i] = numbers[i] / numbers[i + 1];
-                                            numbers.RemoveAt(i + 1);
-                                            operators.RemoveAt(i);
-                                        }
-                                        else
-                                        {
-                                            label_number.Text = "!Error";
-                                            return;
-                                        }
+                                        label_number.Text = "!Error";
+                                        return;
                                     }
-                                    break;
+                                }
+                                break;
 
-                                case (int)OPERATORS.ADD:
-                                    if (operators[i] == "+")
-                                    {
-                                        numbers[i] = numbers[i] + numbers[i + 1];
-                                        numbers.RemoveAt(i + 1);
-                                        operators.RemoveAt(i);
-                                    }
-                                    break;
+                            case (int)OPERATORS.ADD:
+                                if (operators[i] == "+")
+                                {
+                                    numbers[i] = numbers[i] + numbers[i + 1];
+                                    numbers.RemoveAt(i + 1);
+                                    operators.RemoveAt(i);
+                                }
+                                break;
 
-                                case (int)OPERATORS.SUBTRACT:
-                                    if (operators[i] == "−")
-                                    {
-                                        numbers[i] = numbers[i] - numbers[i + 1];
-                                        numbers.RemoveAt(i + 1);
-                                        operators.RemoveAt(i);
-                                    }
-                                    break;
-                            }
+                            case (int)OPERATORS.SUBTRACT:
+                                if (operators[i] == "−")
+                                {
+                                    numbers[i] = numbers[i] - numbers[i + 1];
+                                    numbers.RemoveAt(i + 1);
+                                    operators.RemoveAt(i);
+                                }
+                                break;
                         }
                     }
                 }
-
-                label_number.Text = numbers[0].ToString("N");
-
-                // Check if comma is needed in result
-                int commaPosition = -1;
-                bool nonZeroValueFound = false;
-
-                for (int i = 0; i < label_number.Text.Length; i++)
-                {
-                    if (commaPosition != -1)
-                    {
-                        if (label_number.Text[i].ToString() != "0") nonZeroValueFound = true;
-                        break;
-                    }
-                    else
-                    {
-                        if (label_number.Text[i].ToString() == ",") commaPosition = i;
-                    }
-                }
-
-                if (!nonZeroValueFound)
-                    label_number.Text = label_number.Text.Remove(commaPosition);
-
-                // If comma is needed, check if last digit is zero. If so remove it
-                if (nonZeroValueFound && label_number.Text[label_number.Text.Length - 1].ToString() == "0")
-                    label_number.Text = label_number.Text.Remove(label_number.Text.Length - 1);
-            } catch { }
-        }
-
-        private void RemoveCommaFromLabel()
-        {
-            // Check if comma is needed in number
-            int commaPosition = -1;
-            bool nonZeroValueFound = false;
-
-            for (int i = 0; i < label_number.Text.Length; i++)
-            {
-                if (!nonZeroValueFound)
-                {
-                    if (commaPosition != -1)
-                    {
-                        if (label_number.Text[i].ToString() != "0") nonZeroValueFound = true;
-                    }
-                    else
-                    {
-                        if (label_number.Text[i].ToString() == ",") commaPosition = i;
-                    }
-                }
             }
 
-            // If comma was found, but no number above zero
-            if (!nonZeroValueFound && commaPosition != -1)
-                label_number.Text = label_number.Text.Remove(commaPosition);
-
-            // If comma is needed, check if last digit is zero. If so remove it
-            if (nonZeroValueFound)
-            {
-                while (label_number.Text[label_number.Text.Length - 1].ToString() == "0")
-                {
-                    label_number.Text = label_number.Text.Remove(label_number.Text.Length - 1);
-                }
-            }
-        }
-
-        private void RemoveCommaFromNumber(ref string num)
-        {
-            // Check if comma is needed in number
-            int commaPosition = -1;
-            bool nonZeroValueFound = false;
-
-            for (int i = 0; i < num.Length; i++)
-            {
-                if (!nonZeroValueFound)
-                {
-                    if (commaPosition != -1)
-                    {
-                        if (num[i].ToString() != "0") nonZeroValueFound = true;
-                    }
-                    else
-                    {
-                        if (num[i].ToString() == ",") commaPosition = i;
-                    }
-                }
-            }
-
-            // If comma was found, but no number above zero
-            if (!nonZeroValueFound && commaPosition != -1)
-                num = num.Remove(commaPosition);
-
-            // If comma is needed, check if last digit is zero. If so remove it
-            if (nonZeroValueFound)
-            {
-                while (num[num.Length - 1].ToString() == "0")
-                {
-                    num = num.Remove(num.Length - 1);
-                }
-            }
+            label_number.Text = numbers[0].ToString();
         }
 
         //! VARIABLES !//
@@ -254,8 +157,6 @@ namespace Calc
             this.Controls.Add(title_bar);
             
         }
-
-
 
         //! MOUSE EVENTS !//
 
@@ -320,13 +221,9 @@ namespace Calc
                         comma = false;
                     }
 
-                    if (label_number.Text.Length == 1)
+                    if (label_number.Text.Length > 0)
                     {
-                        label_number.Text = String.Empty;
-                    }
-                    else if (label_number.Text.Length > 1)
-                    {
-                        label_number.Text = label_number.Text.Remove(label_number.Text.Length - 1, 1);
+                        label_number.Text = label_number.Text.Remove(label_number.Text.Length - 1);
 
                         // Check if last character is a comma
                         if (label_number.Text[label_number.Text.Length - 1].ToString() == ",")
@@ -339,13 +236,8 @@ namespace Calc
                         }
                     }
 
-                    comma = false;
-
                     // Check for comma
-                    for (int i = 0; i < label_number.Text.Length; i++)
-                    {
-                        if (label_number.Text[i].ToString() == ",") comma = true;
-                    }
+                    if (!label_number.Text.Contains(",")) comma = false;
 
                     SetNumberLabelSize();
                 }
@@ -353,13 +245,10 @@ namespace Calc
                 {
                     if (label_number.Text != String.Empty && label_number.Text != "Invalid Format")
                     {
+                        // Make sure number label is not Error and that current number fits into equation
                         if (label_number.Text != "!Error" && (label_input.Text.Length + label_number.Text.Length) < 80)
                         {
-                            // If last character in number is a comma, remove it
-                            if (label_number.Text[label_number.Text.Length - 1].ToString() == ",")
-                                label_number.Text = label_number.Text.Remove(label_number.Text.Length - 1);
-
-                            // If equals has been pressed
+                            // If equals has been pressed, clear old equation and start new
                             if (label_input.Text != String.Empty && label_input.Text[label_input.Text.Length - 1].ToString() == "=")
                             {
                                 label_input.Text = String.Empty;
@@ -367,41 +256,39 @@ namespace Calc
                                 numbers.Clear();
                             }
 
+                            double num = double.Parse(label_number.Text);
+
                             switch (obj.Name)
                             {
                                 case "button_divide":
-                                    RemoveCommaFromLabel();
-                                    numbers.Add(Convert.ToDouble(label_number.Text));
+                                    numbers.Add(num);
                                     operators.Add("÷");
-                                    label_input.Text += " " + label_number.Text + " ÷";
+                                    label_input.Text += " " + num + " ÷";
                                     label_comma.Visible = false;
                                     break;
 
                                 case "button_multiply":
-                                    RemoveCommaFromLabel();
-                                    numbers.Add(Convert.ToDouble(label_number.Text));
+                                    numbers.Add(num);
                                     operators.Add("×");
-                                    label_input.Text += " " + label_number.Text + " ×";
+                                    label_input.Text += " " + num + " ×";
                                     label_comma.Visible = false;
                                     break;
 
                                 case "button_subtract":
-                                    RemoveCommaFromLabel();
-                                    numbers.Add(Convert.ToDouble(label_number.Text));
+                                    numbers.Add(num);
                                     operators.Add("−");
-                                    label_input.Text += " " + label_number.Text + " −";
+                                    label_input.Text += " " + num + " −";
                                     label_comma.Visible = false;
                                     break;
 
                                 case "button_add":
-                                    RemoveCommaFromLabel();
-                                    numbers.Add(Convert.ToDouble(label_number.Text));
+                                    numbers.Add(num);
                                     operators.Add("+");
-                                    label_input.Text += " " + label_number.Text + " +";
+                                    label_input.Text += " " + num + " +";
                                     label_comma.Visible = false;
                                     break;
                             }
-
+                            
                             label_number.Text = String.Empty;
                             comma = false;
                         }
@@ -483,21 +370,35 @@ namespace Calc
                 }
                 else if (obj.Name == "button_equals") // Calculate equation
                 {
+                    // Check so operators and numbers list isn't empty. Also make sure current input
+                    // doesn't say "Invalid Format"
                     if (operators.Count != 0 && numbers.Count != 0 && label_number.Text != "Invalid Format")
                     {
-                        // Make sure operators list is not same size as numbers list AND number is not empty
-                        if (operators.Count == numbers.Count && label_number.Text == String.Empty)
+                        // If current number is empty, remove latest operator
+                        if (label_number.Text == String.Empty)
                         {
                             operators.RemoveAt(operators.Count - 1);
-                            label_input.Text = label_input.Text.Remove(label_input.Text.Length - 2);
-                            label_input.Text += " " + label_number.Text + " =";
+
+                            if (operators.Count == 0)
+                            {
+                                label_number.Text = label_input.Text.Remove(label_input.Text.Length - 2).Trim();
+                                label_input.Text = String.Empty;
+                                numbers.Clear();
+                                comma = false;
+                                return;
+                            }
+                            else
+                            {
+                                label_input.Text = label_input.Text.Remove(label_input.Text.Length - 2);
+                                label_input.Text += " " + label_number.Text + " =";
+                            }
                         }
                         else
                         {
                             numbers.Add(Convert.ToDouble(label_number.Text));
                             label_input.Text += " " + label_number.Text + " =";
                         }
-
+                        
                         label_comma.Visible = false;
                         
                         CalculateEquation();
@@ -564,59 +465,26 @@ namespace Calc
             {
                 string clipboardText = Clipboard.GetText();
                 clipboardText = clipboardText.Replace(" ", "").Replace(".", ",").Trim(',');
-                RemoveCommaFromNumber(ref clipboardText);
+                double num;
 
-                bool containsNonDigitValue = false;
-                bool commaFound = false;
-
-                // Check if clipboard contains non digit value
-                for (int i = 0; i < clipboardText.Length; i++)
+                // Try parsing clipboard to double and add to input label.
+                // If not possible, write out "Invalid Format"
+                if (double.TryParse(clipboardText, out num))
                 {
-                    if (!Char.IsDigit(clipboardText[i]) && clipboardText[i].ToString() != ",")
-                        containsNonDigitValue = true;
-
-                    if (commaFound)
-                    {
-                        if (clipboardText[i].ToString() == ",")
-                        {
-                            containsNonDigitValue = true;
-                        }
-                    }
-                    else
-                    {
-                        if (clipboardText[i].ToString() == ",")
-                        {
-                            commaFound = true;
-                        }
-                    }
-                }
-
-                // If non digit value was not found, paste clipboard to calculator. Otherwise return Invalid Format
-                if (!containsNonDigitValue)
-                {
-                    if (clipboardText[clipboardText.Length - 1].ToString() == ",")
-                        clipboardText = clipboardText.Remove(clipboardText.Length - 1);
-
-                    label_number.Text = clipboardText;
+                    label_number.Text = num.ToString();
                     SetNumberLabelSize();
-
-                    if (label_input.Text != String.Empty && label_input.Text[label_input.Text.Length - 1].ToString() == "=")
-                    {
-                        label_input.Text = String.Empty;
-                        operators.Clear();
-                        numbers.Clear();
-                    }
                 }
                 else
                 {
                     label_number.Text = "Invalid Format";
+                }
 
-                    if (label_input.Text != String.Empty && label_input.Text[label_input.Text.Length - 1].ToString() == "=")
-                    {
-                        label_input.Text = String.Empty;
-                        operators.Clear();
-                        numbers.Clear();
-                    }
+                // Check if current equation is finished, if so clear input label
+                if (label_input.Text != String.Empty && label_input.Text[label_input.Text.Length - 1].ToString() == "=")
+                {
+                    label_input.Text = String.Empty;
+                    operators.Clear();
+                    numbers.Clear();
                 }
             }
         }
